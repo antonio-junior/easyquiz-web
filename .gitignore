@@ -1,5 +1,6 @@
-.env*
+.env
 database.sqlite
 .vscode/*
 node_modules
 build
+.next/*
