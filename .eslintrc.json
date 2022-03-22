@@ -1,5 +1,5 @@
 {
-  "ignorePatterns": ["node_modules/" ],
+  "ignorePatterns": ["node_modules/"],
   "env": {
     "browser": true,
     "es6": true,
@@ -7,16 +7,14 @@
     "jest": true
   },
   "extends": [
-    "react-app",
     "airbnb",
     "plugin:@typescript-eslint/recommended",
-    "prettier/@typescript-eslint",
     "plugin:react/recommended",
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:prettier/recommended",
     "prettier",
-    "prettier/react"
+    "plugin:react-hooks/recommended"
   ],
   "globals": {
     "Atomics": "readonly",
@@ -27,7 +25,7 @@
     "ecmaFeatures": {
       "jsx": true
     },
-    "ecmaVersion": 2018,
+    "ecmaVersion": 2020,
     "sourceType": "module"
   },
   "plugins": [
@@ -40,14 +38,31 @@
     "eslint-plugin-import-helpers"
   ],
   "rules": {
+    "semi": 0,
+    "comma-dangle": 0,
+    "prettier/prettier": "error",
     "react/jsx-filename-extension": [
-      "error",
-      {
-        "extensions": [".tsx"]
-      }
+      2,
+      { "extensions": [".js", ".jsx", ".ts", ".tsx"] }
     ],
-    "@typescript-eslint/explicit-function-return-type" : "off",
-    "import/extensions": [ "error", "ignorePackages", { "js": "never", "jsx": "never", "ts": "never", "tsx": "never" } ]
+    // suppress errors for missing 'import React' in files
+    "react/react-in-jsx-scope": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      { "js": "never", "jsx": "never", "ts": "never", "tsx": "never" }
+    ],
+    "jsx-a11y/label-has-associated-control": ["error", {
+      "required": {
+        "some": ["nesting", "id"]
+      }
+    }],
+    "jsx-a11y/label-has-for": ["error", {
+      "required": {
+        "some": ["nesting", "id"]
+      }
+    }]
   },
   "settings": {
     "import/parsers": {
