@@ -1,6 +1,27 @@
 import { LockClosedIcon } from '@heroicons/react/solid';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { useState } from 'react';
+import { useLoginMutation } from '../src/graphql/generated/graphqlGen';
+
+interface IFormInput {
+  email: string;
+  password: string;
+}
 
 function Form() {
+  const [error, setError] = useState('');
+  const { register, handleSubmit } = useForm<IFormInput>();
+  const [loginMutation, { data }] = useLoginMutation({
+    onError: err => {
+      setError(err.message);
+    },
+  });
+
+  const onSubmit: SubmitHandler<IFormInput> = async ({ email, password }) => {
+    setError('');
+    await loginMutation({ variables: { email, password } });
+  };
+
   return (
     <div className='min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8'>
       <div className='max-w-md w-full space-y-8'>
@@ -9,7 +30,7 @@ function Form() {
             Sign in to your account
           </h2>
         </div>
-        <form className='mt-8 space-y-6' action='#' method='POST'>
+        <form className='mt-8 space-y-6' onSubmit={handleSubmit(onSubmit)}>
           <input type='hidden' name='remember' defaultValue='true' />
           <div className='rounded-md shadow-sm -space-y-px'>
             <div>
@@ -17,6 +38,7 @@ function Form() {
                 Email address
               </label>
               <input
+                {...register('email')}
                 id='email-address'
                 name='email'
                 type='email'
@@ -31,6 +53,7 @@ function Form() {
                 Password
               </label>
               <input
+                {...register('password')}
                 id='password'
                 name='password'
                 type='password'
@@ -81,6 +104,10 @@ function Form() {
               </span>
               Sign in
             </button>
+          </div>
+          <div className='text-center text-red text-sm justify-center'>
+            {error && `Error: ${error}`}
+            {data && JSON.stringify(data.login)}
           </div>
         </form>
       </div>

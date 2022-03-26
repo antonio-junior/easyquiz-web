@@ -1,0 +1,14 @@
+overwrite: true
+schema: 'http://easyq-easyq-wzh2s029jetm-1621232562.us-east-1.elb.amazonaws.com/graphql'
+documents: 'src/graphql/*.graphql'
+generates:
+  src/graphql/generated/graphqlGen.ts:
+    plugins:
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-react-apollo'
+      - 'fragment-matcher'
+hooks:
+  afterOneFileWrite:
+    - prettier --write
+    - eslint --fix
