@@ -2,14 +2,14 @@ import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import {
   ApolloClient,
-  InMemoryCache,
   ApolloProvider,
+  InMemoryCache,
   createHttpLink,
 } from '@apollo/client';
 
 const link = createHttpLink({
   uri: process.env.API_URL,
-  credentials: 'same-origin',
+  credentials: 'include',
 });
 
 const client = new ApolloClient({
@@ -17,7 +17,6 @@ const client = new ApolloClient({
   link,
 });
 
-/* eslint-disable react/jsx-props-no-spreading */
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ApolloProvider client={client}>

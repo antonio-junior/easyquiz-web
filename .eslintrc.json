@@ -40,7 +40,14 @@
   "rules": {
     "semi": 0,
     "comma-dangle": 0,
-    "prettier/prettier": "error",
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ],
+    "dot-notation": 0,
+    "react-hooks/rules-of-hooks": "off", 
     "react/jsx-filename-extension": [
       2,
       { "extensions": [".js", ".jsx", ".ts", ".tsx"] }

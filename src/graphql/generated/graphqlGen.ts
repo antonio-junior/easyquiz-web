@@ -195,6 +195,32 @@ export type MeQuery = {
   me?: { __typename?: 'User'; name: string; email: string } | null;
 };
 
+export type PublicQuizesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type PublicQuizesQuery = {
+  __typename?: 'Query';
+  publicQuizes?: Array<{
+    __typename?: 'Quiz';
+    id: string;
+    title: string;
+    dtExpiration?: string | null;
+    owner: { __typename?: 'User'; name: string };
+  }> | null;
+};
+
+export type MyQuizesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type MyQuizesQuery = {
+  __typename?: 'Query';
+  myQuizes?: Array<{
+    __typename?: 'Quiz';
+    id: string;
+    title: string;
+    dtExpiration?: string | null;
+    owner: { __typename?: 'User'; name: string };
+  }> | null;
+};
+
 export type LoginMutationVariables = Exact<{
   email: Scalars['String'];
   password: Scalars['String'];
@@ -244,6 +270,125 @@ export function useMeLazyQuery(
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const PublicQuizesDocument = gql`
+  query publicQuizes {
+    publicQuizes {
+      id
+      owner {
+        name
+      }
+      title
+      dtExpiration
+    }
+  }
+`;
+
+/**
+ * __usePublicQuizesQuery__
+ *
+ * To run a query within a React component, call `usePublicQuizesQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePublicQuizesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePublicQuizesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function usePublicQuizesQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    PublicQuizesQuery,
+    PublicQuizesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<PublicQuizesQuery, PublicQuizesQueryVariables>(
+    PublicQuizesDocument,
+    options
+  );
+}
+export function usePublicQuizesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    PublicQuizesQuery,
+    PublicQuizesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<PublicQuizesQuery, PublicQuizesQueryVariables>(
+    PublicQuizesDocument,
+    options
+  );
+}
+export type PublicQuizesQueryHookResult = ReturnType<
+  typeof usePublicQuizesQuery
+>;
+export type PublicQuizesLazyQueryHookResult = ReturnType<
+  typeof usePublicQuizesLazyQuery
+>;
+export type PublicQuizesQueryResult = Apollo.QueryResult<
+  PublicQuizesQuery,
+  PublicQuizesQueryVariables
+>;
+export const MyQuizesDocument = gql`
+  query myQuizes {
+    myQuizes {
+      id
+      owner {
+        name
+      }
+      title
+      dtExpiration
+    }
+  }
+`;
+
+/**
+ * __useMyQuizesQuery__
+ *
+ * To run a query within a React component, call `useMyQuizesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyQuizesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyQuizesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMyQuizesQuery(
+  baseOptions?: Apollo.QueryHookOptions<MyQuizesQuery, MyQuizesQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<MyQuizesQuery, MyQuizesQueryVariables>(
+    MyQuizesDocument,
+    options
+  );
+}
+export function useMyQuizesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    MyQuizesQuery,
+    MyQuizesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<MyQuizesQuery, MyQuizesQueryVariables>(
+    MyQuizesDocument,
+    options
+  );
+}
+export type MyQuizesQueryHookResult = ReturnType<typeof useMyQuizesQuery>;
+export type MyQuizesLazyQueryHookResult = ReturnType<
+  typeof useMyQuizesLazyQuery
+>;
+export type MyQuizesQueryResult = Apollo.QueryResult<
+  MyQuizesQuery,
+  MyQuizesQueryVariables
+>;
 export const LoginDocument = gql`
   mutation Login($email: String!, $password: String!) {
     login(email: $email, password: $password) {

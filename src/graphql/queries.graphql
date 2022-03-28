@@ -5,6 +5,28 @@ query Me {
   }
 }
 
+query publicQuizes {
+  publicQuizes {
+    id
+    owner {
+      name
+    }
+    title
+    dtExpiration
+  }
+}
+
+query myQuizes {
+  myQuizes {
+    id
+    owner {
+      name
+    }
+    title
+    dtExpiration
+  }
+}
+
 mutation Login($email: String!, $password: String!) {
   login(email: $email, password: $password) {
     id

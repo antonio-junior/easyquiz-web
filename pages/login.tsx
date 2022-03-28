@@ -1,6 +1,7 @@
 import { LockClosedIcon } from '@heroicons/react/solid';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import { useLoginMutation } from '../src/graphql/generated/graphqlGen';
 
 interface IFormInput {
@@ -8,7 +9,8 @@ interface IFormInput {
   password: string;
 }
 
-function Form() {
+function Login() {
+  const router = useRouter();
   const [error, setError] = useState('');
   const { register, handleSubmit } = useForm<IFormInput>();
   const [loginMutation, { data }] = useLoginMutation({
@@ -16,6 +18,10 @@ function Form() {
       setError(err.message);
     },
   });
+
+  if (data?.login) {
+    router.push('/home');
+  }
 
   const onSubmit: SubmitHandler<IFormInput> = async ({ email, password }) => {
     setError('');
@@ -107,7 +113,6 @@ function Form() {
           </div>
           <div className='text-center text-red text-sm justify-center'>
             {error && `Error: ${error}`}
-            {data && JSON.stringify(data.login)}
           </div>
         </form>
       </div>
@@ -115,4 +120,4 @@ function Form() {
   );
 }
 
-export default Form;
+export default Login;
