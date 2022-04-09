@@ -47,12 +47,12 @@
       }
     ],
     "dot-notation": 0,
-    "react-hooks/rules-of-hooks": "off", 
+    "react-hooks/rules-of-hooks": "off",
     "react/jsx-filename-extension": [
       2,
       { "extensions": [".js", ".jsx", ".ts", ".tsx"] }
     ],
-    "react/jsx-props-no-spreading": 0, 
+    "react/jsx-props-no-spreading": 0,
     "no-use-before-define": "off",
     // suppress errors for missing 'import React' in files
     "react/react-in-jsx-scope": "off",

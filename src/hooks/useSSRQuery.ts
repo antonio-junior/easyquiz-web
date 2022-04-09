@@ -5,23 +5,20 @@ import {
   InMemoryCache,
 } from '@apollo/client';
 
-const ssrQuery = async (
-    cookie:String,
-  query: DocumentNode
-) => {
-    const client = new ApolloClient({
+const ssrQuery = async (query: DocumentNode, cookie = '') => {
+  const client = new ApolloClient({
     ssrMode: true,
     link: createHttpLink({
       uri: process.env.API_URL,
       credentials: 'include',
       headers: {
-        cookie
+        cookie,
       },
     }),
     cache: new InMemoryCache(),
   });
 
-  return client.query({query});
+  return client.query({ query });
 };
 
 export default ssrQuery;

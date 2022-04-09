@@ -153,6 +153,7 @@ export type QuestionInput = {
 
 export type Quiz = {
   __typename?: 'Quiz';
+  answersCount: Scalars['Int'];
   dtExpiration?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   isPublic?: Maybe<Scalars['Boolean']>;
@@ -192,7 +193,21 @@ export type MeQueryVariables = Exact<{ [key: string]: never }>;
 
 export type MeQuery = {
   __typename?: 'Query';
-  me?: { __typename?: 'User'; name: string; email: string } | null;
+  me?: {
+    __typename?: 'User';
+    id: string;
+    name: string;
+    email: string;
+    quizes?: Array<{
+      __typename?: 'Quiz';
+      id: string;
+      answersCount: number;
+      dtExpiration?: string | null;
+      title: string;
+      status?: string | null;
+      owner: { __typename?: 'User'; name: string };
+    }> | null;
+  } | null;
 };
 
 export type PublicQuizesQueryVariables = Exact<{ [key: string]: never }>;
@@ -204,6 +219,8 @@ export type PublicQuizesQuery = {
     id: string;
     title: string;
     dtExpiration?: string | null;
+    answersCount: number;
+    status?: string | null;
     owner: { __typename?: 'User'; name: string };
   }> | null;
 };
@@ -217,6 +234,38 @@ export type MyQuizesQuery = {
     id: string;
     title: string;
     dtExpiration?: string | null;
+    answersCount: number;
+    status?: string | null;
+    owner: { __typename?: 'User'; name: string };
+  }> | null;
+};
+
+export type AnsweredQuizesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type AnsweredQuizesQuery = {
+  __typename?: 'Query';
+  answeredQuizes?: Array<{
+    __typename?: 'Quiz';
+    id: string;
+    title: string;
+    dtExpiration?: string | null;
+    answersCount: number;
+    status?: string | null;
+    owner: { __typename?: 'User'; name: string };
+  }> | null;
+};
+
+export type AvailableToAnswerQueryVariables = Exact<{ [key: string]: never }>;
+
+export type AvailableToAnswerQuery = {
+  __typename?: 'Query';
+  availableToAnswer?: Array<{
+    __typename?: 'Quiz';
+    id: string;
+    title: string;
+    dtExpiration?: string | null;
+    answersCount: number;
+    status?: string | null;
     owner: { __typename?: 'User'; name: string };
   }> | null;
 };
@@ -234,8 +283,19 @@ export type LoginMutation = {
 export const MeDocument = gql`
   query Me {
     me {
+      id
       name
       email
+      quizes {
+        id
+        owner {
+          name
+        }
+        answersCount
+        dtExpiration
+        title
+        status
+      }
     }
   }
 `;
@@ -279,6 +339,8 @@ export const PublicQuizesDocument = gql`
       }
       title
       dtExpiration
+      answersCount
+      status
     }
   }
 `;
@@ -341,6 +403,8 @@ export const MyQuizesDocument = gql`
       }
       title
       dtExpiration
+      answersCount
+      status
     }
   }
 `;
@@ -388,6 +452,134 @@ export type MyQuizesLazyQueryHookResult = ReturnType<
 export type MyQuizesQueryResult = Apollo.QueryResult<
   MyQuizesQuery,
   MyQuizesQueryVariables
+>;
+export const AnsweredQuizesDocument = gql`
+  query answeredQuizes {
+    answeredQuizes {
+      id
+      owner {
+        name
+      }
+      title
+      dtExpiration
+      answersCount
+      status
+    }
+  }
+`;
+
+/**
+ * __useAnsweredQuizesQuery__
+ *
+ * To run a query within a React component, call `useAnsweredQuizesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAnsweredQuizesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAnsweredQuizesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAnsweredQuizesQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    AnsweredQuizesQuery,
+    AnsweredQuizesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<AnsweredQuizesQuery, AnsweredQuizesQueryVariables>(
+    AnsweredQuizesDocument,
+    options
+  );
+}
+export function useAnsweredQuizesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    AnsweredQuizesQuery,
+    AnsweredQuizesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<AnsweredQuizesQuery, AnsweredQuizesQueryVariables>(
+    AnsweredQuizesDocument,
+    options
+  );
+}
+export type AnsweredQuizesQueryHookResult = ReturnType<
+  typeof useAnsweredQuizesQuery
+>;
+export type AnsweredQuizesLazyQueryHookResult = ReturnType<
+  typeof useAnsweredQuizesLazyQuery
+>;
+export type AnsweredQuizesQueryResult = Apollo.QueryResult<
+  AnsweredQuizesQuery,
+  AnsweredQuizesQueryVariables
+>;
+export const AvailableToAnswerDocument = gql`
+  query availableToAnswer {
+    availableToAnswer {
+      id
+      owner {
+        name
+      }
+      title
+      dtExpiration
+      answersCount
+      status
+    }
+  }
+`;
+
+/**
+ * __useAvailableToAnswerQuery__
+ *
+ * To run a query within a React component, call `useAvailableToAnswerQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAvailableToAnswerQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAvailableToAnswerQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAvailableToAnswerQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    AvailableToAnswerQuery,
+    AvailableToAnswerQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    AvailableToAnswerQuery,
+    AvailableToAnswerQueryVariables
+  >(AvailableToAnswerDocument, options);
+}
+export function useAvailableToAnswerLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    AvailableToAnswerQuery,
+    AvailableToAnswerQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    AvailableToAnswerQuery,
+    AvailableToAnswerQueryVariables
+  >(AvailableToAnswerDocument, options);
+}
+export type AvailableToAnswerQueryHookResult = ReturnType<
+  typeof useAvailableToAnswerQuery
+>;
+export type AvailableToAnswerLazyQueryHookResult = ReturnType<
+  typeof useAvailableToAnswerLazyQuery
+>;
+export type AvailableToAnswerQueryResult = Apollo.QueryResult<
+  AvailableToAnswerQuery,
+  AvailableToAnswerQueryVariables
 >;
 export const LoginDocument = gql`
   mutation Login($email: String!, $password: String!) {

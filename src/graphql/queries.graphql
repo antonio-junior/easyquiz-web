@@ -1,7 +1,18 @@
 query Me {
   me {
+    id
     name
     email
+    quizes {
+      id
+      owner {
+        name
+      }
+      answersCount
+      dtExpiration
+      title
+      status
+    }
   }
 }
 
@@ -13,6 +24,8 @@ query publicQuizes {
     }
     title
     dtExpiration
+    answersCount
+    status
   }
 }
 
@@ -24,6 +37,34 @@ query myQuizes {
     }
     title
     dtExpiration
+    answersCount
+    status
+  }
+}
+
+query answeredQuizes {
+  answeredQuizes {
+    id
+    owner {
+      name
+    }
+    title
+    dtExpiration
+    answersCount
+    status
+  }
+}
+
+query availableToAnswer {
+  availableToAnswer {
+    id
+    owner {
+      name
+    }
+    title
+    dtExpiration
+    answersCount
+    status
   }
 }
 

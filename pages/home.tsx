@@ -1,48 +1,38 @@
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
+import { useEffect, useState } from 'react';
 import useSSRQuery from '../src/hooks/useSSRQuery';
-import useUser, { DecodedUser } from '../src/hooks/useUser';
-import { MyQuizesDocument } from '../src/graphql/generated/graphqlGen';
-import { Quiz } from '../src/models';
+import useAuth from '../src/hooks/useAuth';
+import { DecodedUser } from '../src/hooks/useUser';
+import { MeDocument, Quiz } from '../src/graphql/generated/graphqlGen';
+import Header from '../src/components/Header';
+import TableQuiz from '../src/components/TableQuiz';
 
 type Props = {
   user: DecodedUser;
-  quizes: [Quiz];
 };
 
-export const getServerSideProps: GetServerSideProps = async ({
-  req: {
-    headers: { cookie },
-  },
-}) => {
-  const user: DecodedUser = useUser(cookie || '');
+export const getServerSideProps: GetServerSideProps = async (
+  ctx: GetServerSidePropsContext
+) => {
+  return useAuth(ctx);
+};
 
-  if (user) {
-    const { data } = await useSSRQuery(cookie || '', MyQuizesDocument);
+function UserHome({ user }: Props) {
+  const [quizes, setQuizes] = useState<Quiz[]>([]);
 
-    return {
-      props: { user, quizes: data.myQuizes },
+  useEffect(() => {
+    const getData = async () => {
+      const { data } = await useSSRQuery(MeDocument);
+      setQuizes(data.me.quizes);
     };
-  }
-  return {
-    redirect: {
-      destination: '/login',
-      permanent: false,
-    },
-  };
-};
 
-function UserHome({ user, quizes }: Props) {
+    getData();
+  }, []);
+
   return (
     <div>
-      <h1>Your Profile, {user?.email}</h1>
-      <h2>Your Quizes</h2>
-      <ul>
-        {quizes?.map(quiz => (
-          <li key={quiz.id}>
-            {quiz.title} - Owner: {quiz.owner.name}
-          </li>
-        ))}
-      </ul>
+      <Header userName={user?.email} />
+      <TableQuiz title='Your Quizes' quizes={quizes} />
     </div>
   );
 }

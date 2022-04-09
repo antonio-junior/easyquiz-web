@@ -3,6 +3,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useLoginMutation } from '../src/graphql/generated/graphqlGen';
+import Title from '../src/components/Title';
 
 interface IFormInput {
   email: string;
@@ -32,9 +33,7 @@ function Login() {
     <div className='min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8'>
       <div className='max-w-md w-full space-y-8'>
         <div>
-          <h2 className='mt-6 text-center text-3xl font-extrabold text-gray-900'>
-            Sign in to your account
-          </h2>
+          <Title text='Sign in to your account' />
         </div>
         <form className='mt-8 space-y-6' onSubmit={handleSubmit(onSubmit)}>
           <input type='hidden' name='remember' defaultValue='true' />
