@@ -6,6 +6,7 @@ import {
   InMemoryCache,
   createHttpLink,
 } from '@apollo/client';
+import { AppContextProvider } from '../src/hooks/appContext';
 
 const link = createHttpLink({
   uri: process.env.API_URL,
@@ -20,7 +21,9 @@ const client = new ApolloClient({
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ApolloProvider client={client}>
-      <Component {...pageProps} />
+      <AppContextProvider>
+        <Component {...pageProps} />
+      </AppContextProvider>
     </ApolloProvider>
   );
 }

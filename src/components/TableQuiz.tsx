@@ -1,8 +1,9 @@
+import Link from 'next/link';
 import Title from './Title';
-import { Quiz } from '../graphql/generated/graphqlGen';
+import { Quiz } from '../models/Quiz';
 
 type Props = {
-  quizes: Quiz[];
+  quizes: Quiz[] | null | undefined;
   title: string;
 };
 
@@ -50,42 +51,41 @@ function Home({ title, quizes }: Props) {
                   </tr>
                 </thead>
                 <tbody>
-                  {quizes.map(quiz => (
-                    <tr
-                      key={quiz.id}
-                      className='border-b transition duration-300 ease-in-out hover:bg-gray-100'
-                    >
-                      <td className='px-5 py-5 border-b border-gray-200 bg-white text-sm'>
-                        <p className='text-gray-900 whitespace-no-wrap'>
-                          {quiz.title}
-                        </p>
-                      </td>
-                      <td className='px-5 py-5 border-b border-gray-200 bg-white text-sm'>
-                        <p className='text-gray-900 whitespace-no-wrap'>
-                          {quiz.owner.name}
-                        </p>
-                      </td>
-                      <td className='px-5 py-5 border-b border-gray-200 bg-white text-sm'>
-                        <p className='text-gray-900 whitespace-no-wrap'>
-                          {quiz.dtExpiration}
-                        </p>
-                      </td>
-                      <td className='px-5 py-5 border-b border-gray-200 bg-white text-sm'>
-                        <p className='text-gray-900 whitespace-no-wrap'>
-                          {' '}
-                          {quiz.answersCount}
-                        </p>
-                      </td>
-                      <td className='px-5 py-5 border-b border-gray-200 bg-white text-sm'>
-                        <span className='relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight'>
-                          <span
-                            aria-hidden='true'
-                            className='absolute inset-0 bg-green-200 opacity-50 rounded-full'
-                          />
-                          <span className='relative'> {quiz.status}</span>
-                        </span>
-                      </td>
-                    </tr>
+                  {quizes?.map(quiz => (
+                    <Link key={quiz.id} href={`/quiz/${quiz.id}`}>
+                      <tr className='border-b transition duration-300 ease-in-out cursor-pointer bg-white hover:bg-gray-100'>
+                        <td className='px-5 py-5 border-b border-gray-200 text-sm'>
+                          <p className='text-gray-900 whitespace-no-wrap'>
+                            {quiz.title}
+                          </p>
+                        </td>
+                        <td className='px-5 py-5 border-b border-gray-200 text-sm'>
+                          <p className='text-gray-900 whitespace-no-wrap'>
+                            {quiz.owner}
+                          </p>
+                        </td>
+                        <td className='px-5 py-5 border-b border-gray-200 text-sm'>
+                          <p className='text-gray-900 whitespace-no-wrap'>
+                            {quiz.dtExpiration}
+                          </p>
+                        </td>
+                        <td className='px-5 py-5 border-b border-gray-200 text-sm'>
+                          <p className='text-gray-900 whitespace-no-wrap'>
+                            {' '}
+                            {quiz.answersCount}
+                          </p>
+                        </td>
+                        <td className='px-5 py-5 border-b border-gray-200 text-sm'>
+                          <span className='relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight'>
+                            <span
+                              aria-hidden='true'
+                              className='absolute inset-0 bg-green-200 opacity-50 rounded-full'
+                            />
+                            <span className='relative'> {quiz.status}</span>
+                          </span>
+                        </td>
+                      </tr>
+                    </Link>
                   ))}
                 </tbody>
               </table>

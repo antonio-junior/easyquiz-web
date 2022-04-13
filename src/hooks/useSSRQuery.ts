@@ -1,11 +1,15 @@
 import {
   ApolloClient,
+  ApolloQueryResult,
   createHttpLink,
   DocumentNode,
   InMemoryCache,
 } from '@apollo/client';
 
-const ssrQuery = async (query: DocumentNode, cookie = '') => {
+async function ssrQuery<Type>(
+  query: DocumentNode,
+  cookie = ''
+): Promise<ApolloQueryResult<Type>> {
   const client = new ApolloClient({
     ssrMode: true,
     link: createHttpLink({
@@ -18,7 +22,7 @@ const ssrQuery = async (query: DocumentNode, cookie = '') => {
     cache: new InMemoryCache(),
   });
 
-  return client.query({ query });
-};
+  return client.query<Type>({ query });
+}
 
 export default ssrQuery;

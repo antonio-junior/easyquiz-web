@@ -2,9 +2,16 @@ import { LockClosedIcon } from '@heroicons/react/solid';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { useLoginMutation } from '../src/graphql/generated/graphqlGen';
 import Title from '../src/components/Title';
+import useAuth from '../src/hooks/useAuth';
 
+export const getServerSideProps: GetServerSideProps = async (
+  ctx: GetServerSidePropsContext
+) => {
+  return useAuth({ req: ctx.req, isLogin: true });
+};
 interface IFormInput {
   email: string;
   password: string;
@@ -14,6 +21,7 @@ function Login() {
   const router = useRouter();
   const [error, setError] = useState('');
   const { register, handleSubmit } = useForm<IFormInput>();
+
   const [loginMutation, { data }] = useLoginMutation({
     onError: err => {
       setError(err.message);
